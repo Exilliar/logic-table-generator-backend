@@ -65,7 +65,10 @@ class TreeController {
                 result: this.head.calcRes(),
             });
         }
-        return letterValResults;
+        return {
+            letterValResults,
+            letters: this.letters
+        };
     }
     binInc(binary) {
         let setTrue = false;

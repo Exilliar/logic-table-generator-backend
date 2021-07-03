@@ -1,5 +1,5 @@
 import { NumberNode, OperatorNode } from ".";
-import { LetterVal, LetterValResults, LtgNode, Operators } from "../models";
+import { LetterVal, LetterValResults, LtgNode, Operators, Results } from "../models";
 
 export class TreeController {
   operators: string[] = ["^", "v"];
@@ -43,7 +43,7 @@ export class TreeController {
     this.head = expOp[0] as OperatorNode;
   }
 
-  calcResults() {
+  calcResults(): Results {
     const numDigits = Math.pow(2, this.letters.length);
     const binary = Array(this.letters.length).fill(false);
     const startLetterVal: LetterVal[] = this.letters.map((l, x) => {
@@ -74,7 +74,10 @@ export class TreeController {
         result: this.head.calcRes(),
       });
     }
-    return letterValResults;
+    return {
+      letterValResults,
+      letters: this.letters
+    };
   }
 
   binInc(binary: boolean[]) {
