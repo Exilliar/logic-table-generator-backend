@@ -1,6 +1,6 @@
 import { LetterValResults } from "./LetterValResults";
 
 export interface Results {
-  LetterValResults: LetterValResults;
+  letterValResults: LetterValResults[];
   letters: string[];
 }

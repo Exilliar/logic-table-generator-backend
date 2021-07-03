@@ -14,4 +14,5 @@ __exportStar(require("./LtgNode"), exports);
 __exportStar(require("./Operators"), exports);
 __exportStar(require("./LetterVal"), exports);
 __exportStar(require("./LetterValResults"), exports);
+__exportStar(require("./Results"), exports);
 //# sourceMappingURL=index.js.map
