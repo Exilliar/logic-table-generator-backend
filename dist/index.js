@@ -5,8 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const tree_1 = require("./tree");
+const cors_1 = __importDefault(require("cors"));
 const app = express_1.default();
 const port = 8080; // default port to listen
+app.use(cors_1.default());
 // define a route handler for the default home page
 app.get("/", (req, res) => {
     res.send("Hello world!");
