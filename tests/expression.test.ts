@@ -1,5 +1,6 @@
 import { NumberNode, OperatorNode, TreeController } from "../src/tree";
 import { LetterValResults, Results } from "../src/models";
+import { resultsTest0 } from "./expressionData";
 
 describe("basic expresssion (one operator)", () => {
   it("should properly convert AvB --> head = ON(NN(A),NN(B),'v')", () => {
@@ -70,63 +71,7 @@ describe("full results test", () => {
     const controller = new TreeController("AvB");
 
     const actual = controller.calcResults();
-    const expected: Results = {
-      letterValResults: [
-        {
-          letterVals: [
-            {
-              letter: "A",
-              val: false,
-            },
-            {
-              letter: "B",
-              val: false,
-            },
-          ],
-          result: false,
-        },
-        {
-          letterVals: [
-            {
-              letter: "A",
-              val: false,
-            },
-            {
-              letter: "B",
-              val: true,
-            },
-          ],
-          result: true,
-        },
-        {
-          letterVals: [
-            {
-              letter: "A",
-              val: true,
-            },
-            {
-              letter: "B",
-              val: false,
-            },
-          ],
-          result: true,
-        },
-        {
-          letterVals: [
-            {
-              letter: "A",
-              val: true,
-            },
-            {
-              letter: "B",
-              val: true,
-            },
-          ],
-          result: true,
-        },
-      ],
-      letters: ["A", "B"],
-    };
+    const expected: Results = resultsTest0;
 
     expect(actual).toEqual(expected);
   });
