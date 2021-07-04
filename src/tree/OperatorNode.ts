@@ -46,6 +46,6 @@ export class OperatorNode {
     else if (this.leftNode instanceof OperatorNode) this.leftNode.propogateVal(letterVal);
 
     if (this.rightNode instanceof NumberNode) this.rightNode.setVal(letterVal);
-    else if (this.leftNode instanceof OperatorNode) this.rightNode.propogateVal(letterVal);
+    else if (this.rightNode instanceof OperatorNode) this.rightNode.propogateVal(letterVal);
   }
 }

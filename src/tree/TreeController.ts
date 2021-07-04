@@ -1,7 +1,7 @@
 import { NumberNode, OperatorNode } from ".";
 import { LetterVal, LetterValResults, LtgNode, Operators, Results } from "../models";
 
-export type ExpNumber = Array<NumberNode | string | OperatorNode>;
+export type ExpNumber = (NumberNode | string | OperatorNode)[];
 
 export class TreeController {
   operators: string[] = ["^", "v"];
@@ -31,15 +31,21 @@ export class TreeController {
       const curr = expressionArr[i];
       // check if curr is an opening brakets
       if (curr === "(") {
-        // find the pos where the braket ends
+        // find start and end pos of the brakets
         let endPos = i+1;
         while (expressionArr[endPos] !== ")") {
           endPos ++;
         }
-        let startPos = i+1;
+        const startPos = i+1;
         const braketExp = expressionArr.slice(startPos, endPos).join("");
+        // run a new controller over the expression in the brakets to get the head node of that to add to the array
         const controller = new TreeController(braketExp);
         expNumber.push(controller.head);
+        // add the letters from the brakets expression to this instance's this.letters
+        this.letters.push(...controller.letters);
+
+        // update i to the end of the brakets
+        i = endPos;
       } else {
         if (!this.operators.includes(curr)) {
           expNumber.push(new NumberNode({ letter: curr }));
