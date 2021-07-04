@@ -1,5 +1,11 @@
 import { NumberNode, OperatorNode } from ".";
-import { LetterVal, LetterValResults, LtgNode, Operators, Results } from "../models";
+import {
+  LetterVal,
+  LetterValResults,
+  LtgNode,
+  Operators,
+  Results,
+} from "../models";
 
 export type ExpNumber = (NumberNode | string | OperatorNode)[];
 
@@ -32,17 +38,22 @@ export class TreeController {
       // check if curr is an opening brakets
       if (curr === "(") {
         // find start and end pos of the brakets
-        let endPos = i+1;
-        while (expressionArr[endPos] !== ")") {
-          endPos ++;
+        let endPos = i + 1;
+        let braketCount = 0; // increments if a new open braket is found, ensures that the ending braket found is for the starting braket that is found
+        while (!(expressionArr[endPos] === ")" && braketCount === 0)) {
+          if (expressionArr[endPos] === "(") braketCount++;
+          if (expressionArr[endPos] === ")") braketCount--;
+          endPos++;
         }
-        const startPos = i+1;
+        const startPos = i + 1;
         const braketExp = expressionArr.slice(startPos, endPos).join("");
         // run a new controller over the expression in the brakets to get the head node of that to add to the array
         const controller = new TreeController(braketExp);
         expNumber.push(controller.head);
-        // add the letters from the brakets expression to this instance's this.letters
-        this.letters.push(...controller.letters);
+        // add the letters from the brakets expression to this instance's this.letters (provided that they're not already in the array)
+        controller.letters.forEach(letter => {
+          if (!this.letters.includes(letter)) this.letters.push(letter);
+        });
 
         // update i to the end of the brakets
         i = endPos;
@@ -110,7 +121,7 @@ export class TreeController {
     }
     return {
       letterValResults,
-      letters: this.letters
+      letters: this.letters,
     };
   }
 

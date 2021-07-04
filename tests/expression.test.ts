@@ -1,6 +1,6 @@
 import { NumberNode, OperatorNode, TreeController } from "../src/tree";
 import { Results } from "../src/models";
-import { resultsTest0, braketsTest0 } from "./expressionData";
+import { resultsTest0, braketsTest0, braketsTest1 } from "./expressionData";
 
 describe("basic expresssion (one operator)", () => {
   it("should properly convert AvB --> head = ON(NN(A),NN(B),'v')", () => {
@@ -94,11 +94,19 @@ describe("brakets testing", () => {
 
     expect(actual).toEqual(expected);
   });
-  it('should fully calculate results for Av(B^C)', () => {
+  it("should fully calculate results for Av(B^C)", () => {
     const controller = new TreeController("Av(B^C)");
 
     const actual = controller.calcResults();
     const expected = braketsTest0;
+
+    expect(actual).toEqual(expected);
+  });
+  it("should fully calculate results for (Av(B^C))vD", () => {
+    const controller = new TreeController("(Av(B^C))vD");
+
+    const actual = controller.calcResults();
+    const expected = braketsTest1;
 
     expect(actual).toEqual(expected);
   });
