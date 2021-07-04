@@ -8,20 +8,56 @@ class TreeController {
         this.nodes = [];
         this.letters = [];
         const expression = exp.replace(/\s/g, ""); // remove spaces from expression
-        const expressionArr = expression.split("");
         // convert all the letters into NumberNodes, leaving the Operators for now
+        const expNumber = this.convLetters(expression);
+        // convert operators into OperatorNodes
+        const expOp = this.convNodes(expNumber);
+        // expOp will only have one val now, which should be the head OperatorNode, so that can be set to head, and the tree is complete
+        this.head = expOp[0];
+    }
+    convLetters(expression) {
+        const expressionArr = expression.split("");
         const expNumber = []; // array for the combo number nodes and operator strings
         for (let i = 0; i < expression.length; i++) {
             const curr = expressionArr[i];
-            if (!this.operators.includes(curr)) {
-                expNumber.push(new _1.NumberNode({ letter: curr }));
-                if (!this.letters.includes(curr))
-                    this.letters.push(curr);
+            // check if curr is an opening brakets
+            if (curr === "(") {
+                // find start and end pos of the brakets
+                let endPos = i + 1;
+                let braketCount = 0; // increments if a new open braket is found, ensures that the ending braket found is for the starting braket that is found
+                while (!(expressionArr[endPos] === ")" && braketCount === 0)) {
+                    if (expressionArr[endPos] === "(")
+                        braketCount++;
+                    if (expressionArr[endPos] === ")")
+                        braketCount--;
+                    endPos++;
+                }
+                const startPos = i + 1;
+                const braketExp = expressionArr.slice(startPos, endPos).join("");
+                // run a new controller over the expression in the brakets to get the head node of that to add to the array
+                const controller = new TreeController(braketExp);
+                expNumber.push(controller.head);
+                // add the letters from the brakets expression to this instance's this.letters (provided that they're not already in the array)
+                controller.letters.forEach(letter => {
+                    if (!this.letters.includes(letter))
+                        this.letters.push(letter);
+                });
+                // update i to the end of the brakets
+                i = endPos;
             }
-            else
-                expNumber.push(curr);
+            else {
+                if (!this.operators.includes(curr)) {
+                    expNumber.push(new _1.NumberNode({ letter: curr }));
+                    if (!this.letters.includes(curr))
+                        this.letters.push(curr);
+                }
+                else
+                    expNumber.push(curr);
+            }
         }
-        // convert operators into OperatorNodes
+        return expNumber;
+    }
+    convNodes(expNumber) {
         let expOp = expNumber.map((e) => e); // new array containing the values from expNumber
         while (expOp.length > 1) {
             let i = 0;
@@ -32,8 +68,7 @@ class TreeController {
             newArr.push(...expOp.slice(i + 2, expOp.length)); // push values after the new conversion
             expOp = newArr; // finally update expOp to be the new array
         }
-        // expOp will only have one val now, which should be the head OperatorNode, so that can be set to head, and the tree is complete
-        this.head = expOp[0];
+        return expOp;
     }
     calcResults() {
         const numDigits = Math.pow(2, this.letters.length);
@@ -67,7 +102,7 @@ class TreeController {
         }
         return {
             letterValResults,
-            letters: this.letters
+            letters: this.letters,
         };
     }
     binInc(binary) {
