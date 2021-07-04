@@ -1,6 +1,8 @@
 import { NumberNode, OperatorNode } from ".";
 import { LetterVal, LetterValResults, LtgNode, Operators, Results } from "../models";
 
+export type ExpNumber = Array<NumberNode | string | OperatorNode>;
+
 export class TreeController {
   operators: string[] = ["^", "v"];
   nodes: LtgNode[] = [];
@@ -10,19 +12,46 @@ export class TreeController {
 
   constructor(exp: string) {
     const expression = exp.replace(/\s/g, ""); // remove spaces from expression
-    const expressionArr = expression.split("");
 
     // convert all the letters into NumberNodes, leaving the Operators for now
-    const expNumber: (NumberNode | string)[] = []; // array for the combo number nodes and operator strings
-    for (let i = 0; i < expression.length; i++) {
-      const curr = expressionArr[i];
-      if (!this.operators.includes(curr)) {
-        expNumber.push(new NumberNode({ letter: curr }));
-        if (!this.letters.includes(curr)) this.letters.push(curr);
-      } else expNumber.push(curr);
-    }
+    const expNumber = this.convLetters(expression);
 
     // convert operators into OperatorNodes
+    const expOp = this.convNodes(expNumber);
+
+    // expOp will only have one val now, which should be the head OperatorNode, so that can be set to head, and the tree is complete
+    this.head = expOp[0] as OperatorNode;
+  }
+
+  convLetters(expression: string) {
+    const expressionArr = expression.split("");
+
+    const expNumber: ExpNumber = []; // array for the combo number nodes and operator strings
+    for (let i = 0; i < expression.length; i++) {
+      const curr = expressionArr[i];
+      // check if curr is an opening brakets
+      if (curr === "(") {
+        // find the pos where the braket ends
+        let endPos = i+1;
+        while (expressionArr[endPos] !== ")") {
+          endPos ++;
+        }
+        let startPos = i+1;
+        const braketExp = expressionArr.slice(startPos, endPos).join("");
+        const controller = new TreeController(braketExp);
+        expNumber.push(controller.head);
+      } else {
+        if (!this.operators.includes(curr)) {
+          expNumber.push(new NumberNode({ letter: curr }));
+          if (!this.letters.includes(curr)) this.letters.push(curr);
+        } else expNumber.push(curr);
+      }
+    }
+
+    return expNumber;
+  }
+
+  convNodes(expNumber: ExpNumber) {
     let expOp: (LtgNode | string)[] = expNumber.map((e) => e); // new array containing the values from expNumber
     while (expOp.length > 1) {
       let i = 0;
@@ -39,8 +68,7 @@ export class TreeController {
       expOp = newArr; // finally update expOp to be the new array
     }
 
-    // expOp will only have one val now, which should be the head OperatorNode, so that can be set to head, and the tree is complete
-    this.head = expOp[0] as OperatorNode;
+    return expOp;
   }
 
   calcResults(): Results {

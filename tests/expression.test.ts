@@ -1,9 +1,5 @@
-import {
-  NumberNode,
-  OperatorNode,
-  TreeController,
-} from "../src/tree";
-import { LetterValResults } from "../src/models";
+import { NumberNode, OperatorNode, TreeController } from "../src/tree";
+import { LetterValResults, Results } from "../src/models";
 
 describe("basic expresssion (one operator)", () => {
   it("should properly convert AvB --> head = ON(NN(A),NN(B),'v')", () => {
@@ -74,60 +70,63 @@ describe("full results test", () => {
     const controller = new TreeController("AvB");
 
     const actual = controller.calcResults();
-    const expected: LetterValResults[] = [
-      {
-        letterVals: [
-          {
-            letter: "A",
-            val: false,
-          },
-          {
-            letter: "B",
-            val: false,
-          },
-        ],
-        result: false,
-      },
-      {
-        letterVals: [
-          {
-            letter: "A",
-            val: false,
-          },
-          {
-            letter: "B",
-            val: true,
-          },
-        ],
-        result: true,
-      },
-      {
-        letterVals: [
-          {
-            letter: "A",
-            val: true,
-          },
-          {
-            letter: "B",
-            val: false,
-          },
-        ],
-        result: true,
-      },
-      {
-        letterVals: [
-          {
-            letter: "A",
-            val: true,
-          },
-          {
-            letter: "B",
-            val: true,
-          },
-        ],
-        result: true,
-      },
-    ];
+    const expected: Results = {
+      letterValResults: [
+        {
+          letterVals: [
+            {
+              letter: "A",
+              val: false,
+            },
+            {
+              letter: "B",
+              val: false,
+            },
+          ],
+          result: false,
+        },
+        {
+          letterVals: [
+            {
+              letter: "A",
+              val: false,
+            },
+            {
+              letter: "B",
+              val: true,
+            },
+          ],
+          result: true,
+        },
+        {
+          letterVals: [
+            {
+              letter: "A",
+              val: true,
+            },
+            {
+              letter: "B",
+              val: false,
+            },
+          ],
+          result: true,
+        },
+        {
+          letterVals: [
+            {
+              letter: "A",
+              val: true,
+            },
+            {
+              letter: "B",
+              val: true,
+            },
+          ],
+          result: true,
+        },
+      ],
+      letters: ["A", "B"],
+    };
 
     expect(actual).toEqual(expected);
   });
