@@ -1,14 +1,14 @@
 import { NumberNode, OperatorNode, TreeController } from "../src/tree";
 import { Results } from "../src/models";
-import { resultsTest0, braketsTest0, braketsTest1 } from "./expressionData";
+import { resultsTest0, braketsTest0, braketsTest1, notTest0, notTest1, notTest2, notTest3, notTest4 } from "./expressionData";
 
 describe("basic expresssion (one operator)", () => {
   it("should properly convert AvB --> head = ON(NN(A),NN(B),'v')", () => {
     const controller = new TreeController("AvB");
     const actual = controller.head;
     const expected = new OperatorNode(
-      new NumberNode({ letter: "A" }),
-      new NumberNode({ letter: "B" }),
+      new NumberNode({ letter: "A", not: false }),
+      new NumberNode({ letter: "B", not: false }),
       "v"
     );
 
@@ -18,8 +18,8 @@ describe("basic expresssion (one operator)", () => {
     const controller = new TreeController("A^B");
     const actual = controller.head;
     const expected = new OperatorNode(
-      new NumberNode({ letter: "A" }),
-      new NumberNode({ letter: "B" }),
+      new NumberNode({ letter: "A", not: false }),
+      new NumberNode({ letter: "B", not: false }),
       "^"
     );
 
@@ -33,11 +33,11 @@ describe("more complex expressions (multiple operators)", () => {
     const actual = controller.head;
     const expected = new OperatorNode(
       new OperatorNode(
-        new NumberNode({ letter: "A" }),
-        new NumberNode({ letter: "B" }),
+        new NumberNode({ letter: "A", not: false }),
+        new NumberNode({ letter: "B", not: false }),
         "v"
       ),
-      new NumberNode({ letter: "C" }),
+      new NumberNode({ letter: "C", not: false }),
       "^"
     );
 
@@ -84,11 +84,11 @@ describe("brakets testing", () => {
     const actual = controller.head;
     const expected = new OperatorNode(
       new OperatorNode(
-        new NumberNode({ letter: "A" }),
-        new NumberNode({ letter: "B" }),
+        new NumberNode({ letter: "A", not: false }),
+        new NumberNode({ letter: "B", not: false }),
         "v"
       ),
-      new NumberNode({ letter: "C" }),
+      new NumberNode({ letter: "C", not: false }),
       "^"
     );
 
@@ -107,6 +107,49 @@ describe("brakets testing", () => {
 
     const actual = controller.calcResults();
     const expected = braketsTest1;
+
+    expect(actual).toEqual(expected);
+  });
+});
+
+describe('NOT tests', () => {
+  it("should calculate Av¬B", () => {
+    const controller = new TreeController("Av¬B");
+
+    const actual = controller.calcResults();
+    const expected = notTest0;
+
+    expect(actual).toEqual(expected);
+  });
+  it("should calculate ¬AvB", () => {
+    const controller = new TreeController("¬AvB");
+
+    const actual = controller.calcResults();
+    const expected = notTest1;
+
+    expect(actual).toEqual(expected);
+  });
+  it("should calculate ¬(AvB)", () => {
+    const controller = new TreeController("¬(AvB)");
+
+    const actual = controller.calcResults();
+    const expected = notTest2;
+
+    expect(actual).toEqual(expected);
+  });
+  it("should calculate ¬(A^B)v(C^¬D) (just a random complexish expression)", () => {
+    const controller = new TreeController("¬(A^B)v(C^¬D)");
+
+    const actual = controller.calcResults();
+    const expected = notTest3;
+
+    expect(actual).toEqual(expected);
+  });
+  it("should calculate ¬(¬(AvB))", () => {
+    const controller = new TreeController("¬(¬(AvB))");
+
+    const actual = controller.calcResults();
+    const expected = notTest4;
 
     expect(actual).toEqual(expected);
   });

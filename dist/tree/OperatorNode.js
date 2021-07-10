@@ -4,9 +4,13 @@ exports.OperatorNode = void 0;
 const _1 = require(".");
 class OperatorNode {
     constructor(lNode, rNode, op) {
+        this.not = false; // will normally be not
         this.leftNode = lNode;
         this.rightNode = rNode;
         this.operator = op;
+    }
+    flipNot() {
+        this.not = !this.not;
     }
     // calculate the result based on the left and right node
     calcRes() {
@@ -29,7 +33,8 @@ class OperatorNode {
                 returnVal = leftVal || rightVal;
                 break;
         }
-        return returnVal;
+        // !== this.not = xor to apply not
+        return returnVal !== this.not;
     }
     // function to set the vals of NumberNodes based on their letters
     propogateVal(letterVal) {

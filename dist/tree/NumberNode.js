@@ -4,13 +4,17 @@ exports.NumberNode = void 0;
 class NumberNode {
     constructor(params) {
         if (params.val === true || params.val === false)
-            this.val = params.val;
-        else if (params.letter)
-            this.letter = params.letter;
+            this._val = params.val;
+        this.letter = params.letter;
+        this.not = params.not;
     }
     // sets val based on the letter/val combination array passed in, assumes that letter has been set
     setVal(letterVal) {
-        this.val = letterVal.find(lv => lv.letter === this.letter).val;
+        this._val = letterVal.find(lv => lv.letter === this.letter).val;
+    }
+    get val() {
+        // !== = xor, applies not to value
+        return this._val !== this.not;
     }
 }
 exports.NumberNode = NumberNode;
