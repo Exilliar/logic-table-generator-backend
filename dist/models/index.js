@@ -15,4 +15,5 @@ __exportStar(require("./Operators"), exports);
 __exportStar(require("./LetterVal"), exports);
 __exportStar(require("./LetterValResults"), exports);
 __exportStar(require("./Results"), exports);
+__exportStar(require("./OperatorDesc"), exports);
 //# sourceMappingURL=index.js.map

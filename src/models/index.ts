@@ -3,3 +3,4 @@ export * from "./Operators";
 export * from "./LetterVal";
 export * from "./LetterValResults";
 export * from "./Results";
+export * from "./OperatorDesc";
