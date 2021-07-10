@@ -49,9 +49,12 @@ export class TreeController {
         const braketExp = expressionArr.slice(startPos, endPos).join("");
         // run a new controller over the expression in the brakets to get the head node of that to add to the array
         const controller = new TreeController(braketExp);
+        // apply not if needed
+        if (i !== 0 && expressionArr[i - 1] === "¬") controller.head.flipNot();
+        // push head node to expNumber
         expNumber.push(controller.head);
         // add the letters from the brakets expression to this instance's this.letters (provided that they're not already in the array)
-        controller.letters.forEach(letter => {
+        controller.letters.forEach((letter) => {
           if (!this.letters.includes(letter)) this.letters.push(letter);
         });
 
@@ -59,8 +62,11 @@ export class TreeController {
         i = endPos;
       } else {
         if (!this.operators.includes(curr)) {
-          expNumber.push(new NumberNode({ letter: curr }));
-          if (!this.letters.includes(curr)) this.letters.push(curr);
+          if (curr !== "¬") { // if curr is ¬, then special things need to happen
+            const not = i !== 0 && expressionArr[i - 1] === "¬";
+            expNumber.push(new NumberNode({ letter: curr, not }));
+            if (!this.letters.includes(curr)) this.letters.push(curr);
+          }
         } else expNumber.push(curr);
       }
     }

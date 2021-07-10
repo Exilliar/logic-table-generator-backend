@@ -1,1 +1,1 @@
-export type Operators = "v" | "^";
+export type Operators = "v" | "^" | "¬";

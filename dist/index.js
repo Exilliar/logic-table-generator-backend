@@ -29,6 +29,11 @@ app.get("/operators", (req, res) => {
             name: "OR",
             desc: "Returns true if A OR B are true (both can be true)",
             examples: ["1 v 1 ==> 1", "1 v 0 ==> 1", "0 v 0 ==> 0"]
+        }, {
+            operator: "¬",
+            name: "NOT",
+            desc: "Inverts the value. Symbol placed before the letter in the expression (eg. ¬A)",
+            examples: ["¬1 ==> 0", "¬0 ==> 1"]
         }];
     res.send(operators);
 });
