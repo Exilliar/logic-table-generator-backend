@@ -19,22 +19,26 @@ app.get("/calculate/:expression", (req, res) => {
     res.send(results);
 });
 app.get("/operators", (req, res) => {
-    const operators = [{
+    const operators = [
+        {
             operator: "^",
             name: "AND",
             desc: "Returns true if A AND B are true",
-            examples: ["1 ^ 1 ==> 1", "1 ^ 0 ==> 0"]
-        }, {
+            examples: ["1 ^ 1 = 1", "1 ^ 0 = 0"],
+        },
+        {
             operator: "v",
             name: "OR",
             desc: "Returns true if A OR B are true (both can be true)",
-            examples: ["1 v 1 ==> 1", "1 v 0 ==> 1", "0 v 0 ==> 0"]
-        }, {
+            examples: ["1 v 1 = 1", "1 v 0 = 1", "0 v 0 = 0"],
+        },
+        {
             operator: "¬",
             name: "NOT",
             desc: "Inverts the value. Symbol placed before the letter in the expression (eg. ¬A)",
-            examples: ["¬1 ==> 0", "¬0 ==> 1"]
-        }];
+            examples: ["¬1 = 0", "¬0 = 1"],
+        },
+    ];
     res.send(operators);
 });
 // start the Express server
