@@ -278,6 +278,64 @@ export const resultsTest0: Results = {
   letters: ["A", "B"],
 };
 
+export const resultsTest1: Results = {
+  letterValResults: [
+    {
+      letterVals: [
+        {
+          letter: "A",
+          val: false,
+        },
+        {
+          letter: "B",
+          val: false,
+        },
+      ],
+      result: true,
+    },
+    {
+      letterVals: [
+        {
+          letter: "A",
+          val: false,
+        },
+        {
+          letter: "B",
+          val: true,
+        },
+      ],
+      result: true,
+    },
+    {
+      letterVals: [
+        {
+          letter: "A",
+          val: true,
+        },
+        {
+          letter: "B",
+          val: false,
+        },
+      ],
+      result: false,
+    },
+    {
+      letterVals: [
+        {
+          letter: "A",
+          val: true,
+        },
+        {
+          letter: "B",
+          val: true,
+        },
+      ],
+      result: true,
+    },
+  ],
+  letters: ["A", "B"],
+};
+
 export const notTest0: Results = {
   letterValResults: [
     {

@@ -10,11 +10,14 @@ class NumberNode {
     }
     // sets val based on the letter/val combination array passed in, assumes that letter has been set
     setVal(letterVal) {
-        this._val = letterVal.find(lv => lv.letter === this.letter).val;
+        this._val = letterVal.find((lv) => lv.letter === this.letter).val;
     }
     get val() {
         // !== = xor, applies not to value
         return this._val !== this.not;
+    }
+    calcRes() {
+        return this.val;
     }
 }
 exports.NumberNode = NumberNode;

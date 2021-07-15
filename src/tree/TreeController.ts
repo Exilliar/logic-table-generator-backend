@@ -10,7 +10,7 @@ import {
 export type ExpNumber = (NumberNode | string | OperatorNode)[];
 
 export class TreeController {
-  operators: string[] = ["^", "v"];
+  operators: string[] = ["^", "v", "-->"];
   nodes: LtgNode[] = [];
   head: OperatorNode;
 
@@ -19,8 +19,11 @@ export class TreeController {
   constructor(exp: string) {
     const expression = exp.replace(/\s/g, ""); // remove spaces from expression
 
+    // split the expression into an array
+    const expressionArr = this.splitExpression(expression);
+
     // convert all the letters into NumberNodes, leaving the Operators for now
-    const expNumber = this.convLetters(expression);
+    const expNumber = this.convLetters(expressionArr);
 
     // convert operators into OperatorNodes
     const expOp = this.convNodes(expNumber);
@@ -29,11 +32,26 @@ export class TreeController {
     this.head = expOp[0] as OperatorNode;
   }
 
-  convLetters(expression: string) {
-    const expressionArr = expression.split("");
+  splitExpression(expression: string): string[] {
+    const arr = expression.split("");
+    const expressionArr: string[] = [];
 
+    arr.forEach((a) => {
+      // if the current item is not part of IMPLIES, just add it to expressionArr
+      if (a !== "-" && a !== ">") {
+        expressionArr.push(a);
+      } else if (expressionArr[expressionArr.length - 1] !== "-->") {
+        // if it is part of IMPLIES, check whether the IMPLIES has already been added, and if it has not then add it, otherwise just move on
+        expressionArr.push("-->");
+      }
+    });
+
+    return expressionArr;
+  }
+
+  convLetters(expressionArr: string[]) {
     const expNumber: ExpNumber = []; // array for the combo number nodes and operator strings
-    for (let i = 0; i < expression.length; i++) {
+    for (let i = 0; i < expressionArr.length; i++) {
       const curr = expressionArr[i];
       // check if curr is an opening brakets
       if (curr === "(") {
@@ -62,7 +80,8 @@ export class TreeController {
         i = endPos;
       } else {
         if (!this.operators.includes(curr)) {
-          if (curr !== "¬") { // if curr is ¬, then special things need to happen
+          if (curr !== "¬") {
+            // if curr is ¬, then special things need to happen
             const not = i !== 0 && expressionArr[i - 1] === "¬";
             expNumber.push(new NumberNode({ letter: curr, not }));
             if (!this.letters.includes(curr)) this.letters.push(curr);
