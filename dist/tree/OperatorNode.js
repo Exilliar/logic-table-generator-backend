@@ -10,20 +10,13 @@ class OperatorNode {
         this.operator = op;
     }
     flipNot() {
+        // not is not set in the constructor as it will not be known what not should be when creating the node. Also keeps the constructor cleaner
         this.not = !this.not;
     }
     // calculate the result based on the left and right node
     calcRes() {
-        let leftVal;
-        let rightVal;
-        if (this.leftNode instanceof _1.NumberNode)
-            leftVal = this.leftNode.val;
-        else if (this.leftNode instanceof OperatorNode)
-            leftVal = this.leftNode.calcRes();
-        if (this.rightNode instanceof _1.NumberNode)
-            rightVal = this.rightNode.val;
-        else if (this.rightNode instanceof OperatorNode)
-            rightVal = this.rightNode.calcRes();
+        const leftVal = this.leftNode.calcRes();
+        const rightVal = this.rightNode.calcRes();
         let returnVal;
         switch (this.operator) {
             case "^":
@@ -32,6 +25,8 @@ class OperatorNode {
             case "v":
                 returnVal = leftVal || rightVal;
                 break;
+            case "-->":
+                returnVal = !(leftVal === true && rightVal === false);
         }
         // !== this.not = xor to apply not
         return returnVal !== this.not;

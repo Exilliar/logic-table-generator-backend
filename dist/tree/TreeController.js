@@ -4,21 +4,37 @@ exports.TreeController = void 0;
 const _1 = require(".");
 class TreeController {
     constructor(exp) {
-        this.operators = ["^", "v"];
+        this.operators = ["^", "v", "-->"];
         this.nodes = [];
         this.letters = [];
         const expression = exp.replace(/\s/g, ""); // remove spaces from expression
+        // split the expression into an array
+        const expressionArr = this.splitExpression(expression);
         // convert all the letters into NumberNodes, leaving the Operators for now
-        const expNumber = this.convLetters(expression);
+        const expNumber = this.convLetters(expressionArr);
         // convert operators into OperatorNodes
         const expOp = this.convNodes(expNumber);
         // expOp will only have one val now, which should be the head OperatorNode, so that can be set to head, and the tree is complete
         this.head = expOp[0];
     }
-    convLetters(expression) {
-        const expressionArr = expression.split("");
+    splitExpression(expression) {
+        const arr = expression.split("");
+        const expressionArr = [];
+        arr.forEach((a) => {
+            // if the current item is not part of IMPLIES, just add it to expressionArr
+            if (a !== "-" && a !== ">") {
+                expressionArr.push(a);
+            }
+            else if (expressionArr[expressionArr.length - 1] !== "-->") {
+                // if it is part of IMPLIES, check whether the IMPLIES has already been added, and if it has not then add it, otherwise just move on
+                expressionArr.push("-->");
+            }
+        });
+        return expressionArr;
+    }
+    convLetters(expressionArr) {
         const expNumber = []; // array for the combo number nodes and operator strings
-        for (let i = 0; i < expression.length; i++) {
+        for (let i = 0; i < expressionArr.length; i++) {
             const curr = expressionArr[i];
             // check if curr is an opening brakets
             if (curr === "(") {
@@ -51,7 +67,8 @@ class TreeController {
             }
             else {
                 if (!this.operators.includes(curr)) {
-                    if (curr !== "¬") { // if curr is ¬, then special things need to happen
+                    if (curr !== "¬") {
+                        // if curr is ¬, then special things need to happen
                         const not = i !== 0 && expressionArr[i - 1] === "¬";
                         expNumber.push(new _1.NumberNode({ letter: curr, not }));
                         if (!this.letters.includes(curr))

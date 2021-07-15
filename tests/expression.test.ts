@@ -1,6 +1,33 @@
 import { NumberNode, OperatorNode, TreeController } from "../src/tree";
 import { Results } from "../src/models";
-import { resultsTest0, braketsTest0, braketsTest1, notTest0, notTest1, notTest2, notTest3, notTest4 } from "./expressionData";
+import {
+  resultsTest0,
+  braketsTest0,
+  braketsTest1,
+  notTest0,
+  notTest1,
+  notTest2,
+  notTest3,
+  notTest4,
+  resultsTest1,
+} from "./expressionData";
+
+describe("splitExpression", () => {
+  it("should properly split 'AvB'", () => {
+    const controller = new TreeController("AvB"); // just a random expression, does not matter what goes here for this test
+    const actual = controller.splitExpression("AvB");
+    const expected = ["A", "v", "B"];
+
+    expect(actual).toEqual(expected);
+  });
+  it("should properly split 'A-->B'", () => {
+    const controller = new TreeController("AvB"); // just a random expression, does not matter what goes here for this test
+    const actual = controller.splitExpression("A-->B");
+    const expected = ["A", "-->", "B"];
+
+    expect(actual).toEqual(expected);
+  });
+});
 
 describe("basic expresssion (one operator)", () => {
   it("should properly convert AvB --> head = ON(NN(A),NN(B),'v')", () => {
@@ -21,6 +48,17 @@ describe("basic expresssion (one operator)", () => {
       new NumberNode({ letter: "A", not: false }),
       new NumberNode({ letter: "B", not: false }),
       "^"
+    );
+
+    expect(actual).toEqual(expected);
+  });
+  it("should properly convert A-->B --> head = ON(NN(A),NN(B),'-->')", () => {
+    const controller = new TreeController("A-->B");
+    const actual = controller.head;
+    const expected = new OperatorNode(
+      new NumberNode({ letter: "A", not: false }),
+      new NumberNode({ letter: "B", not: false }),
+      "-->"
     );
 
     expect(actual).toEqual(expected);
@@ -75,6 +113,14 @@ describe("full results test", () => {
 
     expect(actual).toEqual(expected);
   });
+  it("should calc all results for A-->B", () => {
+    const controller = new TreeController("A-->B");
+
+    const actual = controller.calcResults();
+    const expected: Results = resultsTest1;
+
+    expect(actual).toEqual(expected);
+  });
 });
 
 describe("brakets testing", () => {
@@ -112,7 +158,7 @@ describe("brakets testing", () => {
   });
 });
 
-describe('NOT tests', () => {
+describe("NOT tests", () => {
   it("should calculate Av¬B", () => {
     const controller = new TreeController("Av¬B");
 

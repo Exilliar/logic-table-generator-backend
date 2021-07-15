@@ -38,6 +38,12 @@ app.get("/operators", (req, res) => {
       desc: "Inverts the value. Symbol placed before the letter in the expression (eg. ¬A)",
       examples: ["¬1 = 0", "¬0 = 1"],
     },
+    {
+      operator: "-->",
+      name: "IMPLIES",
+      desc: "A --> B Returns true unless A is true and B is false",
+      examples: ["1 --> 0 = 0", "1 --> 1 = 1"],
+    },
   ];
   res.send(operators);
 });

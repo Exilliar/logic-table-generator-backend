@@ -20,6 +20,24 @@ describe("basic trees (1 level)", () => {
 
     expect(actual).toBe(expected);
   });
+  it("should calc 1 --> 0 = 0", () => {
+    const num1 = new NumberNode({ val: true, letter: "A", not: false });
+    const num2 = new NumberNode({ val: false, letter: "A", not: false });
+    const op = new OperatorNode(num1, num2, "-->");
+    const actual = op.calcRes();
+    const expected = false;
+
+    expect(actual).toBe(expected);
+  });
+  it("should calc 1 --> 1 = 1", () => {
+    const num1 = new NumberNode({ val: true, letter: "A", not: false });
+    const num2 = new NumberNode({ val: true, letter: "A", not: false });
+    const op = new OperatorNode(num1, num2, "-->");
+    const actual = op.calcRes();
+    const expected = true;
+
+    expect(actual).toBe(expected);
+  });
 });
 
 describe("more complex trees (2 levels)", () => {

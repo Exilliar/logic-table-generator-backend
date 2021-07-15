@@ -1,3 +1,6 @@
-import { NumberNode, OperatorNode } from '../tree';
+import { NumberNode, OperatorNode } from "../tree";
 
-export type LtgNode = NumberNode | OperatorNode;
+// export type LtgNode = NumberNode | OperatorNode;
+export interface LtgNode {
+  calcRes: () => boolean;
+}
